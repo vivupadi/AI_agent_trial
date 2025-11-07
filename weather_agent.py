@@ -12,18 +12,23 @@ from datetime import datetime
 import schedule
 import time
 
+import os 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # ========== CONFIGURATION ==========
 # Get free API key from: https://openweathermap.org/api
-OPENWEATHER_API_KEY = "your_api_key_here"
-CITY = "London"  # Change to your city
-COUNTRY_CODE = "UK"  # 2-letter country code
+OPENWEATHER_API_KEY = os.getenv('weather_api_key')
+CITY = "Mainz"  # Change to your city
+COUNTRY_CODE = "DE"  # 2-letter country code
 
 # Gmail credentials
-GMAIL_ADDRESS = "your_email@gmail.com"
-GMAIL_APP_PASSWORD = "your_app_password_here"  # Use App Password, not regular password
+GMAIL_ADDRESS = os.getenv("gmail_id")
+GMAIL_APP_PASSWORD = os.getenv("google_app_password")  # Use App Password, not regular password
 
 # Recipient
-RECIPIENT_EMAIL = "recipient@example.com"
+RECIPIENT_EMAIL = "vivekpadayattil@gmail.com"
 
 # Weather thresholds for umbrella recommendation
 RAIN_THRESHOLD = 0.3  # 30% chance of rain
@@ -52,6 +57,7 @@ class WeatherEmailAgent:
             response = requests.get(self.base_url, params=params)
             response.raise_for_status()
             data = response.json()
+            #breakpoint()
             
             return {
                 'description': data['weather'][0]['description'],
@@ -131,7 +137,7 @@ class WeatherEmailAgent:
         
         if need_umbrella:
             subject = "☔ Umbrella Reminder - Take Your Umbrella Today!"
-            body = f"""Hello!
+            body = f"""Hello Vivek!
 
 Your Weather Agent here with an important reminder:
 
@@ -154,13 +160,7 @@ Automated message from your Weather Email Agent
             self.send_email(subject, body)
         else:
             print(f"\n☀️ No umbrella needed - {reason}")
-            # Optionally send a "no umbrella" email too
-            # Uncomment below if you want daily updates regardless
-            """
-            subject = "☀️ Weather Update - No Umbrella Needed"
-            body = f"Good weather today in {self.city}! {reason}\\nTemperature: {weather['temp']}°C"
-            self.send_email(subject, body)
-            """
+
 
 
 def main():
@@ -174,7 +174,7 @@ def main():
     agent.run_check()
     
     # Schedule daily check at 7:00 AM
-    schedule.every().day.at("07:00").do(agent.run_check)
+    schedule.every().day.at("16:49").do(agent.run_check)
     
     print("\n⏰ Scheduled daily check at 7:00 AM")
     print("Press Ctrl+C to stop the agent\n")
