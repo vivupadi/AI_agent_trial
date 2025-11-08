@@ -28,7 +28,7 @@ GMAIL_ADDRESS = os.getenv("gmail_id")
 GMAIL_APP_PASSWORD = os.getenv("google_app_password")  # Use App Password, not regular password
 
 # Recipient
-RECIPIENT_EMAIL = "vivekpadayattil@gmail.com"
+#RECIPIENT_EMAIL = "vivekpadayattil@gmail.com"
 
 # Weather thresholds for umbrella recommendation
 RAIN_THRESHOLD = 0.3  # 30% chance of rain
@@ -39,8 +39,9 @@ RAIN_KEYWORDS = ['rain', 'drizzle', 'thunderstorm', 'shower']
 class WeatherEmailAgent:
     """Agent that checks weather and sends email reminders"""
     
-    def __init__(self, api_key, city, country_code):
+    def __init__(self, api_key, recipient_email, city, country_code):
         self.api_key = api_key
+        self.email = recipient_email
         self.city = city
         self.country_code = country_code
         self.base_url = "http://api.openweathermap.org/data/2.5/weather"
@@ -94,7 +95,7 @@ class WeatherEmailAgent:
             # Create message
             msg = MIMEMultipart()
             msg['From'] = GMAIL_ADDRESS
-            msg['To'] = RECIPIENT_EMAIL
+            msg['To'] = self.email
             msg['Subject'] = subject
             
             msg.attach(MIMEText(body, 'plain'))
@@ -183,7 +184,7 @@ def main():
     try:
         while True:
             schedule.run_pending()
-            time.sleep(60)  # Check every minute
+            time.sleep(24*60)  # Check every minute
     except KeyboardInterrupt:
         print("\n\n👋 Agent stopped by user")
 

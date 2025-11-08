@@ -2,12 +2,24 @@ from fastapi import FastAPI, HTTPException
 import requests
 import colorsys
 import pydantic
+from typing import Optional, List
+
+from fastapi.middleware.cors import CORSMiddleware
 
 
 from pydantic import BaseModel
 from datetime import datetime
 import uvicorn
+import schedule
 
+from weather_agent import WeatherEmailAgent
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+OPENWEATHER_API_KEY= os.getenv('weather_api_key')
 
 app = FastAPI(title= 'Weather app',
               version= '1.0.0')
@@ -33,6 +45,7 @@ class ReminderResponse(BaseModel):
     id: int
     email: str
     city: str
+    country_code: str
     time: str
     enabled: bool
     created_at: str
@@ -41,9 +54,8 @@ class ReminderResponse(BaseModel):
 reminders_db: List[dict] = []
 reminder_id_counter = 1
 
-class ReminderResponse(BaseModel):
 
-classes to validate the data
+#classes to validate the data
 
 
 @app.get("/")
@@ -54,7 +66,6 @@ async def root():
         "endpoints": {
             "GET /": "This welcome message",
             "GET /health": "Health check",
-            "GET /reminders": "List all reminders",
             "POST /reminders": "Create new reminder",
             "GET /reminders/{id}": "Get specific reminder",
             "PUT /reminders/{id}": "Update reminder",
@@ -71,10 +82,27 @@ async def health_check():
         "reminders_count": len(reminders_db)
     }
 
+@app.post("/reminders", response_model = Reminder)
+async def create_reminder(email:str,
+    city:str,
+    country_code:str):
+    agent = WeatherEmailAgent(OPENWEATHER_API_KEY, email, city, country_code)
 
-    agent = WeatherEmailAgent(OPENWEATHER_API_KEY, CITY, COUNTRY_CODE)
     agent.run_check()
 
     schedule.every().day.at("16:49").do(agent.run_check)
 
 
+# ========== RUN LOCALLY ==========
+
+if __name__ == "__main__":
+    print("🌤️ Starting Weather Agent API...")
+    print("📍 http://localhost:8000")
+    print("📚 Docs: http://localhost:8000/docs")
+    
+    uvicorn.run(
+        "api_server:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True
+    )
