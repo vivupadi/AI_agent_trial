@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather agent</title>
+    <style>
+        body { padding: 50px; font-family: Arial; }
+        #chat { border: 1px solid #ccc; height: 300px; padding: 10px; overflow-y: scroll; }
+        input { width: 20%; padding: 10px; }
+        button { padding: 10px 20px; }
+    </style>
+</head>
+
+<body>
+    <div id="chat"></div>
+    <input id="Recipient_email" type="text" placeholder="email">
+    <input id="City" type="text" placeholder="City">
+    <input id="Country_code" type="text" placeholder="Country Code">
+    <button onclick="send_weather_mail()">Send</button>
+    <script>
+        const API_URL = 'http://localhost:8000'
+
+        async function send_weather_mail(){
+            const emailInput = document.getElementById('Recipient_email');
+            const email = emailInput.value;
+
+            const cityInput = document.getElementById('City');
+            const city = cityInput.value;
+
+            const country_codeInput = document.getElementById('Country_code');
+            const country_code = country_codeInput.value;
+
+            //show user's question in chat
+            // document.getElementById('chat').innerHTML += `<p><strong>You: </strong> ${question}</p>`;
+
+
+            //TAlking to the API
+            fetch(`${API_URL}/reminders`, {
+                method: 'POST',  // We're sending data (POST request)
+                headers: {
+                    'Content-Type': 'application/json'  // We're sending JSON
+                },
+                body: JSON.stringify({
+                    email: email,  // email
+                    city: city,  // City
+                    country_code: country_code,  // Country code
+                })
+            });
+
+            alert('Request sent!');
+
+            //clear the input
+            //cityInput.value = '';
+            //country_codeInput.value = '';
+
+            // const data = response.json();
+
+            // Show AI's answer in chat
+            // document.getElementById('chat').innerHTML += 
+            //    `<p><strong>Chatbot:</strong> ${data.answer}</p>`;
+            
+            // Scroll to bottom
+            //const chat = document.getElementById('chat');
+            //chat.scrollTop = chat.scrollHeight;
+        }
+    </script>
+
+</body>
+</html>

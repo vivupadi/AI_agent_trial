@@ -38,8 +38,7 @@ app.add_middleware(
 class Reminder(BaseModel):
     email:str
     city:str
-    time:str
-    enabled: bool =True
+    country_code: str
 
 class ReminderResponse(BaseModel):
     id: int
@@ -83,14 +82,15 @@ async def health_check():
     }
 
 @app.post("/reminders", response_model = Reminder)
-async def create_reminder(email:str,
-    city:str,
-    country_code:str):
-    agent = WeatherEmailAgent(OPENWEATHER_API_KEY, email, city, country_code)
+async def create_reminder(request: Reminder):
+
+    agent = WeatherEmailAgent(OPENWEATHER_API_KEY, request.email, request.city, request.country_code)
 
     agent.run_check()
 
     schedule.every().day.at("16:49").do(agent.run_check)
+
+    #return None
 
 
 # ========== RUN LOCALLY ==========
