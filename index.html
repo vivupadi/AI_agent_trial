@@ -13,11 +13,12 @@
 </head>
 
 <body>
-    <div id="chat"></div>
-    <input id="Recipient_email" type="text" placeholder="email">
-    <input id="City" type="text" placeholder="City">
-    <input id="Country_code" type="text" placeholder="Country Code">
-    <button onclick="send_weather_mail()">Send</button>
+    <h1>Weather agent reminder</h1>
+    <!--<div id="chat"></div>-->
+    <div><input id="Recipient_email" type="text" placeholder="email"></div>
+    <div><input id="City" type="text" placeholder="City"></div>
+    <div><input id="Country_code" type="text" placeholder="Country Code"></div>
+    <div><button onclick="send_weather_mail()">Send</button></div>
     <script>
         const API_URL = 'http://localhost:8000'
 
@@ -50,19 +51,6 @@
 
             alert('Request sent!');
 
-            //clear the input
-            //cityInput.value = '';
-            //country_codeInput.value = '';
-
-            // const data = response.json();
-
-            // Show AI's answer in chat
-            // document.getElementById('chat').innerHTML += 
-            //    `<p><strong>Chatbot:</strong> ${data.answer}</p>`;
-            
-            // Scroll to bottom
-            //const chat = document.getElementById('chat');
-            //chat.scrollTop = chat.scrollHeight;
         }
     </script>
 

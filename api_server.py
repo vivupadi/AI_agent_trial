@@ -66,9 +66,6 @@ async def root():
             "GET /": "This welcome message",
             "GET /health": "Health check",
             "POST /reminders": "Create new reminder",
-            "GET /reminders/{id}": "Get specific reminder",
-            "PUT /reminders/{id}": "Update reminder",
-            "DELETE /reminders/{id}": "Delete reminder"
         }
     }
 
@@ -88,9 +85,15 @@ async def create_reminder(request: Reminder):
 
     agent.run_check()
 
-    schedule.every().day.at("16:49").do(agent.run_check)
+    schedule.every().day.at("08:30").do(agent.run_check)
 
-    #return None
+    return {
+        "success": True,
+        "message": "Reminder created and email sent!",
+        "email": request.email,
+        "city": request.city,
+        "country_code": request.country_code
+    }
 
 
 # ========== RUN LOCALLY ==========
