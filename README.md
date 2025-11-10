@@ -4,7 +4,8 @@ An AI agent that sends everyday reminder email whether to carry an umbrella(rain
 
 ## Tech Stack
 
-####
-Front : HTML/Javascript
+Frontend : HTML/Javascript
+
 Backend: Python/ Open Weather API/ FastAPI
+
 Hosted: Railway/ Github
