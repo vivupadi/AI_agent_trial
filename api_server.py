@@ -5,6 +5,7 @@ import pydantic
 from typing import Optional, List
 
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 
 from pydantic import BaseModel
@@ -59,15 +60,7 @@ reminder_id_counter = 1
 
 @app.get("/")
 async def root():
-    return {
-        "message": "Welcome to Weather Reminder API!",
-        "docs": "/docs",
-        "endpoints": {
-            "GET /": "This welcome message",
-            "GET /health": "Health check",
-            "POST /reminders": "Create new reminder",
-        }
-    }
+    return FileResponse("index.html")
 
 @app.get("/health")
 async def health_check():
