@@ -1,6 +1,6 @@
 # Weather Alert Agent
 
-An AI agent that sends everyday reminder email whether to carry an umbrella(rain probability) to the user-provided mail-id based on the user-provided city and country code at scheduled time.
+An AI agent that sends reminder email whether to carry an umbrella(rain probability) to the user-provided mail-id based on the user-provided city and country code.
 
 ## Tech Stack
 
