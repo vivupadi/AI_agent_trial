@@ -12,6 +12,6 @@ Hosted: Railway/ Github
 
 ## Live Demo
 
-[Weather Agent](aiagenttrial-production.up.railway.app)
+[Weather Agent](https://aiagenttrial-production.up.railway.app/)
 
 ## Licenses
