@@ -4,6 +4,8 @@ import colorsys
 import pydantic
 from typing import Optional, List
 
+import sqlite3
+
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
@@ -34,6 +36,30 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*']
 )
+
+# Database setup
+DATABASE = "tasks.db"
+
+@contextmanager
+def get_db():
+    """Context manager for database connections"""
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    try:
+        yield conn
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+
+def init_db():
+    """Initialize the database with a tasks table"""
+    with get_db() as conn:
+        conn.execute("""
+          
+        """)
 
 #Data models
 class Reminder(BaseModel):
@@ -70,6 +96,8 @@ async def health_check():
         "timestamp": datetime.now().isoformat(),
         "reminders_count": len(reminders_db)
     }
+
+@app.post("/save", response_model = Reminder)
 
 @app.post("/reminders", response_model = Reminder)
 async def create_reminder(request: Reminder):
