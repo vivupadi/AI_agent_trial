@@ -58,7 +58,11 @@ def init_db():
     """Initialize the database with a tasks table"""
     with get_db() as conn:
         conn.execute("""
-          
+            CREATE TABLE IF NOT EXISTS tasks (
+                email TEXT PRIMARY KEY,
+                CITY TEXT NOT NULL,
+                COUNTRY_CODE TEXT
+            )
         """)
 
 #Data models
@@ -76,6 +80,12 @@ class ReminderResponse(BaseModel):
     enabled: bool
     created_at: str
 
+class ReminderDB(BaseModel):
+    email: str
+    city: str
+    country_code: str
+    time: str
+
 # In-memory database (for learning - use real DB in production)
 reminders_db: List[dict] = []
 reminder_id_counter = 1
@@ -86,6 +96,7 @@ reminder_id_counter = 1
 
 @app.get("/")
 async def root():
+    init_db()
     return FileResponse("index.html")
 
 @app.get("/health")
@@ -98,6 +109,32 @@ async def health_check():
     }
 
 @app.post("/save", response_model = Reminder)
+def add_weather(weather: ReminderDB):
+    """
+    ADD weather data to database
+    """
+    with get_db() as conn:
+        cursor = conn.execute(
+            """
+            INSERT INTO weather (email, city, country_code)
+            VALUES (?, ?, ?)
+            """,
+            (
+                weather.email,
+                weather.city,
+                weather.country_code,
+                datetime.now().isoformat()
+            )
+        )
+        weather_id = cursor.lastrowid
+        
+        # Fetch the created record
+        row = conn.execute(
+            "SELECT * FROM weather WHERE id = ?", (weather_id,)
+        ).fetchone()
+        
+        return dict(row)
+
 
 @app.post("/reminders", response_model = Reminder)
 async def create_reminder(request: Reminder):
