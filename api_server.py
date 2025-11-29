@@ -15,6 +15,8 @@ from datetime import datetime
 import uvicorn
 import schedule
 
+from contextlib import contextmanager
+
 from weather_agent import WeatherEmailAgent
 
 import os
@@ -38,7 +40,7 @@ app.add_middleware(
 )
 
 # Database setup
-DATABASE = "tasks.db"
+DATABASE = "weather.db"
 
 @contextmanager
 def get_db():
@@ -58,8 +60,8 @@ def init_db():
     """Initialize the database with a tasks table"""
     with get_db() as conn:
         conn.execute("""
-            CREATE TABLE IF NOT EXISTS tasks (
-                email TEXT PRIMARY KEY,
+            CREATE TABLE IF NOT EXISTS weather (
+                EMAIL TEXT PRIMARY KEY,
                 CITY TEXT NOT NULL,
                 COUNTRY_CODE TEXT
             )
@@ -135,6 +137,14 @@ def add_weather(weather: ReminderDB):
         
         return dict(row)
 
+@app.delete("/api/users/{email}")
+def delete_user(email: int):
+    """Delete user"""
+    with get_db() as conn:
+        cursor = conn.execute("DELETE FROM users WHERE id = ?", (email,))
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="User not found")
+        return {"message": "User deleted successfully"}
 
 @app.post("/reminders", response_model = Reminder)
 async def create_reminder(request: Reminder):
