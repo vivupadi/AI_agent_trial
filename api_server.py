@@ -111,7 +111,7 @@ async def health_check():
     }
 
 @app.post("/save", response_model = Reminder)
-def add_weather(weather: ReminderDB):
+def add_weather(weather: Reminder):
     """
     ADD weather data to database
     """
@@ -124,18 +124,17 @@ def add_weather(weather: ReminderDB):
             (
                 weather.email,
                 weather.city,
-                weather.country_code,
-                datetime.now().isoformat()
+                weather.country_code
             )
         )
-        weather_id = cursor.lastrowid
+        #weather_id = cursor.lastrowid
         
         # Fetch the created record
-        row = conn.execute(
-            "SELECT * FROM weather WHERE id = ?", (weather_id,)
-        ).fetchone()
-        
-        return dict(row)
+        #row = conn.execute(
+        #    "SELECT * FROM weather WHERE email = ?", (weather_id,)
+        #).fetchone()
+        print('successfully saved')
+        #return dict(row)
 
 @app.delete("/api/users/{email}")
 def delete_user(email: int):
