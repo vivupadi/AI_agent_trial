@@ -8,7 +8,10 @@ Frontend : HTML/Javascript
 
 Backend: Python/ SQLite/ FastAPI
 
+Database: SQLite (In progress)
+
 Hosted: Railway/ Github
+(Edit: Will be soon shifted to Hetzner)
 
 ## Live Demo
 
