@@ -6,9 +6,12 @@ An AI agent that sends reminder email whether to carry an umbrella(rain probabil
 
 Frontend : HTML/Javascript
 
-Backend: Python/ Open Weather API/ FastAPI
+Backend: Python/ SQLite/ FastAPI
+
+Database: SQLite (In progress)
 
 Hosted: Railway/ Github
+(Edit: Will be soon shifted to Hetzner)
 
 ## Live Demo
 
