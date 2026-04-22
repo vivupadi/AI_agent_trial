@@ -15,6 +15,6 @@ Hosted: Railway/ Github
 
 ## Live Demo
 
-[Weather Agent](https://aiagenttrial-production.up.railway.app/)
+[Weather Agent](https://aiagenttrial-production.up.railway.app/) (Under maintenance: Railway subscription expired - will be moved to Hetzner cloud)
 
 ## Licenses
