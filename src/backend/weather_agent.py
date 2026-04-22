@@ -175,7 +175,7 @@ def main():
     agent.run_check()
     
     # Schedule daily check at 7:00 AM
-    schedule.every().day.at("16:49").do(agent.run_check)
+    schedule.every().day.at("20:50").do(agent.run_check)
     
     print("\n⏰ Scheduled daily check at 7:00 AM")
     print("Press Ctrl+C to stop the agent\n")
