@@ -17,7 +17,7 @@ import schedule
 
 from contextlib import contextmanager
 
-from weather_agent import WeatherEmailAgent
+from src.backend.weather_agent import WeatherEmailAgent
 
 import os
 from dotenv import load_dotenv
