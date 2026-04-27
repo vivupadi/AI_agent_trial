@@ -23,7 +23,8 @@ class Create_db:
                     EMAIL        TEXT PRIMARY KEY,
                     CITY         TEXT NOT NULL,
                     COUNTRY_CODE TEXT,
-                    USER         TEXT
+                    USER         TEXT,
+                    SCHEDULED_TIME         TIME
                 )
             """)
 
@@ -47,15 +48,15 @@ class Create_db:
         finally:
             conn.close()
 
-    def add_weather(self, user, email, city, country_code):
+    def add_weather(self, user, email, city, country_code, scheduled_time):
         """
         ADD weather data to database
         """
         with self.get_db() as conn:
             conn.execute(
                 """
-                INSERT INTO weather (user, email, city, country_code)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO weather (user, email, city, country_code, scheduled_time)
+                VALUES (?, ?, ?, ?, ?)
                 """,
                 (
                     user,

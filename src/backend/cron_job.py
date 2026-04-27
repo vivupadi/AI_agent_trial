@@ -16,8 +16,6 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
-import schedule
-import time
 
 from src.backend.create_db import Create_db
 
@@ -25,13 +23,6 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
-class Customer:
-    def __init__(self, name, email, city, country_code):
-        self.name = name
-        self.email = email
-        self.city = city
-        self.country_code = country_code
 
 # ========== CONFIGURATION ==========
 # Get free API key from: https://openweathermap.org/api
@@ -51,13 +42,14 @@ RAIN_KEYWORDS = ['rain', 'drizzle', 'thunderstorm', 'shower']
 class WeatherEmailAgent:
     """Agent that checks weather and sends email reminders"""
     
-    def __init__(self, api_key, recipient_email, user, city, country_code):
+    def __init__(self, api_key, recipient_email, user, city, country_code, scheduled_time):
 
         self.api_key = api_key
         self.user = user
         self.email = recipient_email
         self.city = city
         self.country_code = country_code
+        self.scheduled_time = scheduled_time
         self.base_url = "http://api.openweathermap.org/data/2.5/weather"
         
     def get_weather(self):
@@ -152,7 +144,7 @@ class WeatherEmailAgent:
         
         if need_umbrella:
             subject = "☔ Umbrella Reminder - Take Your Umbrella Today!"
-            body = f"""Hello Vivek!
+            body = f"""Hello {self.user}!
 
 Your Weather Agent here with an important reminder:
 
@@ -182,29 +174,21 @@ def main():
     """Run the agent"""
     print("🤖 Weather Email Agent Starting...")
 
+    current_time = datetime.now().time()
+    current_hour = current_time.hour
+
     db = Create_db()
     users = db.get_all_users()
 
     for user in users:
-        # Create agent instance
-        agent = WeatherEmailAgent(OPENWEATHER_API_KEY, CITY, COUNTRY_CODE)
-        
-        # Run immediately on start
-        agent.run_check()
-        
-        # Schedule daily check at 7:00 AM
-        schedule.every().day.at("20:50").do(agent.run_check)
-        
-        print("\n⏰ Scheduled daily check at 7:00 AM")
-        print("Press Ctrl+C to stop the agent\n")
-        
-        # Keep the agent running
-        try:
-            while True:
-                schedule.run_pending()
-                time.sleep(24*60)  # Check every minute
-        except KeyboardInterrupt:
-            print("\n\n👋 Agent stopped by user")
+        scheduled_hour = int(user['SCHEDULED_TIME'].split(':')[0])
+
+        if current_hour == scheduled_hour:
+            # Create agent instance
+            agent = WeatherEmailAgent(OPENWEATHER_API_KEY, user['EMAIL'], user['USER'], user['CITY'], user['COUNTRY_CODE'], user['SCHEDULED_TIME'])
+            
+            # Run check for this user
+            agent.run_check()
 
 
 if __name__ == "__main__":
