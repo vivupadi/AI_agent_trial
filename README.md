@@ -10,8 +10,7 @@ Backend: Python/ SQLite/ FastAPI
 
 Database: SQLite (In progress)
 
-Hosted: Railway/ Github
-(Edit: Will be soon shifted to Hetzner)
+Hosted: Hetzner Server using Kubernetes K3 service
 
 ## Live Demo
 
