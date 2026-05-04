@@ -1,12 +1,3 @@
-def initialize_db():
-
-
-
-def send_mail():
-
-
-def send_telegram_msg():
-#!/usr/bin/env python3
 """
 Run the script daily to assess the weather and send the reminder to the registered user
 """
@@ -34,7 +25,7 @@ GMAIL_APP_PASSWORD = os.getenv("google_app_password")  # Use App Password, not r
 
 
 # Weather thresholds for umbrella recommendation
-RAIN_THRESHOLD = 0.25  # 25% chance of rain
+RAIN_THRESHOLD = 0.15  # 25% chance of rain
 RAIN_KEYWORDS = ['rain', 'drizzle', 'thunderstorm', 'shower']
 # ===================================
 
@@ -50,7 +41,8 @@ class WeatherEmailAgent:
         self.city = city
         self.country_code = country_code
         self.scheduled_time = scheduled_time
-        self.base_url = "http://api.openweathermap.org/data/2.5/weather"
+        self.forecast_url = "http://api.openweathermap.org/data/2.5/forecast"
+        self.current_url = "http://api.openweathermap.org/data/2.5/weather"
         
     def get_weather(self):
         """Fetch current weather and forecast"""
@@ -60,18 +52,35 @@ class WeatherEmailAgent:
                 'appid': self.api_key,
                 'units': 'metric'  # Use Celsius
             }
+        
+            #Forecast result
+            forecast_response = requests.get(self.forecast_url, params=params)
+            forecast_response.raise_for_status()
+            forecast_data = forecast_response.json()
+
+            #current weather result
+            current_response = requests.get(self.current_url, params=params)
+            current_response.raise_for_status()
+            current_data = current_response.json()
             
-            response = requests.get(self.base_url, params=params)
-            response.raise_for_status()
-            data = response.json()
-            #breakpoint()
-            
+            #Filter forcast entries for today
+            today = datetime.now().date()
+            today_forcasts = []
+
+            for entry in forecast_data['list']:
+                forecast_time = datetime.fromtimestamp(entry['dt'])
+                if forecast_time.date() == today:
+                    today_forcasts.append({
+                        'time': forecast_time.strftime('%H:%M'),
+                        'weather': entry['weather'][0]['main'].lower(),
+                        'description': entry['weather'][0]['description']
+                    })
+
             return {
-                'description': data['weather'][0]['description'],
-                'main': data['weather'][0]['main'].lower(),
-                'temp': data['main']['temp'],
-                'humidity': data['main']['humidity'],
-                'rain_probability': data.get('clouds', {}).get('all', 0) / 100  # Cloud coverage as proxy
+                'current_description': current_data['weather'][0]['description'],
+                'temp': current_data['main']['temp'],
+                'humidity': current_data['main']['humidity'],
+                'today_forecast': today_forcasts
             }
         except Exception as e:
             print(f"Error fetching weather: {e}")
@@ -82,18 +91,17 @@ class WeatherEmailAgent:
         if not weather_data:
             return False, "Unable to fetch weather data"
         
-        weather_main = weather_data['main']
-        description = weather_data['description']
+       # Check all forecast entries for today
+        rain_times = []
+        for forecast in weather_data['today_forecasts']:
+            if any(keyword in forecast['weather'] for keyword in RAIN_KEYWORDS):
+                rain_times.append(f"{forecast['time']} ({forecast['description']})")
         
-        # Check if it's raining or likely to rain
-        if any(keyword in weather_main for keyword in RAIN_KEYWORDS):
-            return True, f"It's currently {description}"
-        
-        # Check if it's cloudy/high chance of rain
-        if weather_data['rain_probability'] > RAIN_THRESHOLD:
-            return True, f"High chance of rain - {description}"
-        
-        return False, f"Clear weather - {description}"
+        if rain_times:
+            times_str = ", ".join(rain_times)
+            return True, f"Rain expected today at: {times_str}"
+    
+        return False, "No rain expected today"
     
     def send_email(self, subject, body):
         """Send email via Gmail SMTP"""
@@ -135,9 +143,9 @@ class WeatherEmailAgent:
             return
         
         print(f"Location: {self.city}, {self.country_code}")
-        print(f"Temperature: {weather['temp']}°C")
-        print(f"Condition: {weather['description']}")
-        print(f"Humidity: {weather['humidity']}%")
+        print(f"Temperature: {weather['current_temp']}°C")
+        print(f"Condition: {weather['current_description']}")
+        print(f"Humidity: {weather['current_humidity']}%")
         
         # Decide on umbrella
         need_umbrella, reason = self.should_carry_umbrella(weather)
@@ -151,9 +159,9 @@ Your Weather Agent here with an important reminder:
 🌧️ DON'T FORGET YOUR UMBRELLA TODAY! 🌧️
 
 Current Weather in {self.city}:
-• Condition: {weather['description'].title()}
-• Temperature: {weather['temp']}°C
-• Humidity: {weather['humidity']}%
+• Condition: {weather['current_description'].title()}
+• Temperature: {weather['current_temp']}°C
+• Humidity: {weather['current_humidity']}%
 
 Reason: {reason}
 
@@ -182,6 +190,8 @@ def main():
 
     for user in users:
         scheduled_hour = int(user['SCHEDULED_TIME'].split(':')[0])
+
+        print(f"Checking user: {user['USER']} - Scheduled Hour: {scheduled_hour} - Current Hour: {current_hour}")
 
         if current_hour == scheduled_hour:
             # Create agent instance

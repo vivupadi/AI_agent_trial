@@ -40,7 +40,7 @@ app.add_middleware(
 )
 
 # Database setup
-DATABASE = "weather.db"
+DATABASE = "db/weather.db"
 
 @contextmanager
 def get_db():
@@ -61,17 +61,21 @@ def init_db():
     with get_db() as conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS weather (
-                EMAIL TEXT PRIMARY KEY,
-                CITY TEXT NOT NULL,
-                COUNTRY_CODE TEXT
+                EMAIL        TEXT PRIMARY KEY,
+                CITY         TEXT NOT NULL,
+                COUNTRY_CODE TEXT,
+                USER         TEXT,
+                SCHEDULED_TIME         TEXT
             )
         """)
 
 #Data models
 class Reminder(BaseModel):
-    email:str
-    city:str
+    email: str
+    city: str
     country_code: str
+    user: str
+    scheduled_time: str
 
 class ReminderResponse(BaseModel):
     id: int
@@ -99,7 +103,7 @@ reminder_id_counter = 1
 @app.get("/")
 async def root():
     init_db()
-    return FileResponse("index.html")
+    return FileResponse("src/frontend/index.html")
 
 @app.get("/health")
 async def health_check():
@@ -118,13 +122,15 @@ def add_weather(weather: Reminder):
     with get_db() as conn:
         cursor = conn.execute(
             """
-            INSERT INTO weather (email, city, country_code)
-            VALUES (?, ?, ?)
+            INSERT INTO weather (email, city, country_code, user, scheduled_time)
+            VALUES (?, ?, ?, ?, ?)
             """,
             (
                 weather.email,
                 weather.city,
-                weather.country_code
+                weather.country_code,
+                weather.user,
+                weather.scheduled_time
             )
         )
         #weather_id = cursor.lastrowid
@@ -134,7 +140,7 @@ def add_weather(weather: Reminder):
         #    "SELECT * FROM weather WHERE email = ?", (weather_id,)
         #).fetchone()
         print('successfully saved')
-        #return dict(row)
+        return weather
 
 @app.delete("/api/users/{email}")
 def delete_user(email: int):
@@ -148,7 +154,7 @@ def delete_user(email: int):
 @app.post("/reminders", response_model = Reminder)
 async def create_reminder(request: Reminder):
 
-    agent = WeatherEmailAgent(OPENWEATHER_API_KEY, request.email, request.city, request.country_code)
+    agent = WeatherEmailAgent(OPENWEATHER_API_KEY, request.email, request.city, request.country_code, request.user, request.scheduled_time)
 
     agent.run_check()
 
@@ -159,7 +165,9 @@ async def create_reminder(request: Reminder):
         "message": "Reminder created and email sent!",
         "email": request.email,
         "city": request.city,
-        "country_code": request.country_code
+        "country_code": request.country_code,
+        "user": request.user,
+        "scheduled_time": request.scheduled_time
     }
 
 
@@ -171,7 +179,7 @@ if __name__ == "__main__":
     print("📚 Docs: http://localhost:8000/docs")
     
     uvicorn.run(
-        "api_server:app",
+        "src.backend.api_server:app",
         host="0.0.0.0",
         port=8000,
         reload=True

@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Database setup
-DATABASE = "weather.db"
+DATABASE = "db/weather.db"
 
 class Create_db:
     def __init__(self):
@@ -24,7 +24,7 @@ class Create_db:
                     CITY         TEXT NOT NULL,
                     COUNTRY_CODE TEXT,
                     USER         TEXT,
-                    SCHEDULED_TIME         TIME
+                    SCHEDULED_TIME         TEXT
                 )
             """)
 

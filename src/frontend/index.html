@@ -18,6 +18,8 @@
     <div><input id="Recipient_email" type="text" placeholder="email"></div>
     <div><input id="City" type="text" placeholder="City"></div>
     <div><input id="Country_code" type="text" placeholder="Country Code"></div>
+    <div><input id="User" type="text" placeholder="User"></div>
+    <div><input id="Scheduled_time" type="text" placeholder="Scheduled Time"></div>
     <div><button onclick="send_weather_mail()">Send</button></div>
     <script>
         // const API_URL = 'http://localhost:8000'
@@ -33,6 +35,12 @@
             const country_codeInput = document.getElementById('Country_code');
             const country_code = country_codeInput.value;
 
+            const userInput = document.getElementById('User');
+            const user = userInput.value;
+
+            const scheduledTimeInput = document.getElementById('Scheduled_time');
+            const scheduled_time = scheduledTimeInput.value;
+
             //show user's question in chat
             // document.getElementById('chat').innerHTML += `<p><strong>You: </strong> ${question}</p>`;
 
@@ -47,6 +55,8 @@
                     email: email,  // email
                     city: city,  // City
                     country_code: country_code,  // Country code
+                    user: user,  // User
+                    scheduled_time: scheduled_time  // Scheduled time
                 })
             });
 
