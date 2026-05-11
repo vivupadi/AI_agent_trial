@@ -78,8 +78,8 @@ class WeatherEmailAgent:
 
             return {
                 'current_description': current_data['weather'][0]['description'],
-                'temp': current_data['main']['temp'],
-                'humidity': current_data['main']['humidity'],
+                'current_temp': current_data['main']['temp'],
+                'current_humidity': current_data['main']['humidity'],
                 'today_forecast': today_forcasts
             }
         except Exception as e:
@@ -93,7 +93,7 @@ class WeatherEmailAgent:
         
        # Check all forecast entries for today
         rain_times = []
-        for forecast in weather_data['today_forecasts']:
+        for forecast in weather_data['today_forecast']:
             if any(keyword in forecast['weather'] for keyword in RAIN_KEYWORDS):
                 rain_times.append(f"{forecast['time']} ({forecast['description']})")
         

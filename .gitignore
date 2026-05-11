@@ -3,3 +3,5 @@
 __pycache__
 
 src/backend/weather_agent.py
+
+db/*

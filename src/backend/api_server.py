@@ -142,11 +142,11 @@ def add_weather(weather: Reminder):
         print('successfully saved')
         return weather
 
-@app.delete("/api/users/{email}")
-def delete_user(email: int):
+@app.delete("/delete/{email}")
+def delete_user(email: str):
     """Delete user"""
     with get_db() as conn:
-        cursor = conn.execute("DELETE FROM users WHERE id = ?", (email,))
+        cursor = conn.execute("DELETE FROM weather WHERE email = ?", (email,))
         if cursor.rowcount == 0:
             raise HTTPException(status_code=404, detail="User not found")
         return {"message": "User deleted successfully"}

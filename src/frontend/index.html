@@ -20,12 +20,14 @@
     <div><input id="Country_code" type="text" placeholder="Country Code"></div>
     <div><input id="User" type="text" placeholder="User"></div>
     <div><input id="Scheduled_time" type="text" placeholder="Scheduled Time"></div>
-    <div><button onclick="send_weather_mail()">Send</button></div>
+    <div><button onclick="add_user_mail()">Add User</button></div>
+    <div><input id="delete_email" type="text" placeholder="Enter the email of the recipient to be deleted"></div>
+    <div><button onclick="delete_user()">Delete User</button></div>
     <script>
         // const API_URL = 'http://localhost:8000'
         const API_URL = window.location.origin
 
-        async function send_weather_mail(){
+        async function add_user_mail(){
             const emailInput = document.getElementById('Recipient_email');
             const email = emailInput.value;
 
@@ -62,6 +64,19 @@
 
             alert('Request sent!');
 
+        }
+        async function delete_user(){
+            const emailInput = document.getElementById('delete_email');
+            const email = emailInput.value;
+
+            fetch(`${API_URL}/delete/${email}`, {
+                method: 'DELETE',  // Use DELTE method
+                headers: {
+                    'Content-Type': 'application/json'  // We're sending JSON
+                }
+            });
+
+            alert('Delete request sent!');
         }
     </script>
 
