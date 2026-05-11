@@ -8,9 +8,23 @@ Frontend : HTML/Javascript
 
 Backend: Python/ SQLite/ FastAPI
 
-Database: SQLite (In progress)
+Database: SQLite 
 
 Hosted: Hetzner Server using Kubernetes K3 service
+
+## Project Structure
+
+- src
+   - backend
+     - create_db.py
+     - cron_job.py
+     - api_server.py
+  - frontend
+    - index.html
+- Dockerfile.api
+- Dockerfile.cronjob
+- .env
+- .gitignore
 
 ## Live Demo
 
