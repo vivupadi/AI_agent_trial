@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: weather-frontend-dpl
+  name: weather-frontend-dpl
+  namespace: weather
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-frontend-dpl
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: weather-frontend-dpl
+    spec:
+      containers:
+      - image: vivupadi/weather-frontend:latest
+        name: weather-frontend
+        resources: {}
+status: {}

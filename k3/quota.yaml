@@ -5,7 +5,7 @@ metadata:
   namespace: weather
 spec:
   hard:
-    requests.cpu: "200m"
-    requests.memory: "512Mi"
-    limits.cpu: "500m"
-    limits.memory: "1024Mi"
+    requests.cpu: "250m"
+    requests.memory: "640Mi"
+    limits.cpu: "600m"
+    limits.memory: "1280Mi"
