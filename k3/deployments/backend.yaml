@@ -18,6 +18,12 @@ spec:
     spec:
       containers:
         - image: vivupadi/weather-backend:latest
-        name: weather-backend-latest
-        resources: {}
+          name: weather-backend
+          resources: 
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "200m"
+              memory: "512Mi"
 status: {}

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: weather-api-depl
+  name: weather-api-svc
+  namespace: weather
+spec:
+  ports:
+  - port: 31080
+    protocol: TCP
+    targetPort: 31080
+  selector:
+    app: weather-api-depl
+  type: NodePort
+status:
+  loadBalancer: {}
