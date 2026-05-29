@@ -7,11 +7,11 @@ metadata:
   namespace: weather
 spec:
   ports:
-  - port: 31080
+  - port: 8080
     protocol: TCP
-    targetPort: 31080
+    targetPort: 8080
   selector:
     app: weather-api-depl
-  type: NodePort
+  type: ClusterIP
 status:
   loadBalancer: {}

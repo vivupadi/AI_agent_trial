@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: weather-frontend-dpl
+  name: weather-frontend-svc
+  namespace: weather
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 31080
+  selector:
+    app: weather-frontend-dpl
+  type: NodePort
+status:
+  loadBalancer: {}
