@@ -151,7 +151,7 @@ def delete_user(email: str):
             raise HTTPException(status_code=404, detail="User not found")
         return {"message": "User deleted successfully"}
 
-@app.post("/reminders", response_model = Reminder)
+"""@app.post("/reminders", response_model = Reminder)
 async def create_reminder(request: Reminder):
 
     agent = WeatherEmailAgent(OPENWEATHER_API_KEY, request.email, request.city, request.country_code, request.user, request.scheduled_time)
@@ -169,7 +169,7 @@ async def create_reminder(request: Reminder):
         "user": request.user,
         "scheduled_time": request.scheduled_time
     }
-
+"""
 
 # ========== RUN LOCALLY ==========
 
