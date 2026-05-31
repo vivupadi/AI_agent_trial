@@ -17,7 +17,6 @@ import uvicorn
 
 from contextlib import contextmanager
 
-from src.backend.weather_agent import WeatherEmailAgent
 
 import os
 from dotenv import load_dotenv
