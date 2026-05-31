@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: message_user
+  namespace: weather
+spec:
+  jobTemplate:
+    metadata:
+      name: message_user
+    spec:
+      template:
+        metadata: {}
+        spec:
+          containers:
+          - image: vivupadi/weather-cronjob:latest
+            name: message_user
+            resources: {}
+          restartPolicy: OnFailure
+  schedule: '* */1 * * *'
+status: {}
