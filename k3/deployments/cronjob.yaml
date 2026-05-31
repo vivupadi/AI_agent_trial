@@ -19,5 +19,18 @@ spec:
       containers:
       - image: vivupadi/weather-cronjob:latest
         name: weather-cronjob
-        resources: {}
+        resources: 
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+          limits:
+            cpu: "150m"
+            memory: "256Mi"
+        volumeMounts:
+          - name: weather-db
+            mountPath: /app/db
+      volumes:
+      - name: weather-db
+        persistentVolumeClaim:
+          claimName: weather-db-pvc
 status: {}
