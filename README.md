@@ -28,6 +28,6 @@ Hosted: Hetzner Server using Kubernetes K3 service
 
 ## Live Demo
 
-[Weather Agent](https://aiagenttrial-production.up.railway.app/) (Under maintenance: Railway subscription expired - will be moved to Hetzner cloud)
+[Weather Agent](http://46.225.56.25:31080/)
 
 ## Licenses
