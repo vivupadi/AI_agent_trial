@@ -1,10 +1,10 @@
 
 import sqlite3
-import psycopg2
+#import psycopg2
 
 from contextlib import contextmanager
 
-from src.backend.weather_agent import WeatherEmailAgent
+#from src.backend.weather_agent import WeatherEmailAgent
 
 import os
 from dotenv import load_dotenv
