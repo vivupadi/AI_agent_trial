@@ -60,9 +60,21 @@
                     user: user,  // User
                     scheduled_time: scheduled_time  // Scheduled time
                 })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('✓ User added successfully!');
+                console.log('Success:', data);
+            })
+            .catch(error => {
+                alert('✗ Error: ' + error.message);
+                console.error('Error:', error);
             });
-
-            alert('Request sent!');
 
         }
         async function delete_user(){
@@ -74,9 +86,20 @@
                 headers: {
                     'Content-Type': 'application/json'  // We're sending JSON
                 }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('✓ User deleted successfully!');
+            })
+            .catch(error => {
+                alert('✗ Delete failed: ' + error.message);
+                console.error('Error:', error);
             });
-
-            alert('Delete request sent!');
         }
     </script>
 

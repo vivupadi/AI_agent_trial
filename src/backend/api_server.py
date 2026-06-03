@@ -174,12 +174,12 @@ async def create_reminder(request: Reminder):
 
 if __name__ == "__main__":
     print("🌤️ Starting Weather Agent API...")
-    print("📍 http://localhost:8000")
-    print("📚 Docs: http://localhost:8000/docs")
+    print("📍 http://localhost:8080")
+    print("📚 Docs: http://localhost:8080/docs")
     
     uvicorn.run(
         "src.backend.api_server:app",
         host="0.0.0.0",
-        port=8000,
+        port=8080,
         reload=True
     )
