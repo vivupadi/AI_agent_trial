@@ -10,8 +10,9 @@ spec:
   - port: 8080
     protocol: TCP
     targetPort: 8080
+    nodePort: 30081
   selector:
     app: weather-api-depl
-  type: ClusterIP
+  type: NodePort
 status:
   loadBalancer: {}
