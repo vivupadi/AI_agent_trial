@@ -18,6 +18,7 @@ spec:
     spec:
       containers:
         - image: vivupadi/weather-backend:latest
+          imagePullPolicy: Always
           name: weather-backend
           resources: 
             requests:
