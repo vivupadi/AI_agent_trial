@@ -6,14 +6,14 @@ metadata:
 spec:
   jobTemplate:
     metadata:
-      name: message_user
+      name: message-user
     spec:
       template:
         metadata: {}
         spec:
           containers:
           - image: vivupadi/weather-cronjob:latest
-            name: message_user
+            name: message-user
             resources: 
               requests:
                 cpu: "50m"
