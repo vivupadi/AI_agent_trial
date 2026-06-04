@@ -5,3 +5,4 @@ __pycache__
 src/backend/weather_agent.py
 
 db/*
+k3/api-secrets.yaml

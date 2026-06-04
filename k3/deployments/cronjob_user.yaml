@@ -24,10 +24,26 @@ spec:
             volumeMounts:
             - name: weather-db
               mountPath: /app/db
+            env:
+            - name: weather_api_key
+              valueFrom:
+                secretKeyRef:
+                  name: api-keys
+                  key: weather_api_key
+            - name: gmail_id
+              valueFrom:
+                secretKeyRef:
+                  name: api-keys
+                  key: gmail_id
+            - name: google_app_password
+              valueFrom:
+                secretKeyRef:
+                  name: api-keys
+                  key: google_app_password
           volumes:
           - name: weather-db
             persistentVolumeClaim:
               claimName: weather-db-pvc
           restartPolicy: OnFailure
-  schedule: '0 * * * *'
+  schedule: '30 * * * *'
 status: {}
