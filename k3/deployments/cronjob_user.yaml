@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: message_user
+  name: message-user
   namespace: weather
 spec:
   jobTemplate:
@@ -45,5 +45,5 @@ spec:
             persistentVolumeClaim:
               claimName: weather-db-pvc
           restartPolicy: OnFailure
-  schedule: '30 * * * *'
+  schedule: '45 * * * *'
 status: {}
