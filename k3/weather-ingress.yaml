@@ -3,7 +3,14 @@ kind: Ingress
 metadata:
   name: weather-ingress
   namespace: weather
+  annotations:
+    # For Traefik (K3s default)
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    # For automatic HTTPS redirect
+    traefik.ingress.kubernetes.io/redirect-entry-point: websecure
+    traefik.ingress.kubernetes.io/redirect-permanent: "true"
 spec:
+  ingressClassName: traefik
   rules:
   - host: weather.vivekpadayattil.com
     http:
@@ -14,6 +21,6 @@ spec:
             port:
               number: 80
         path: /
-        pathType: Exact
+        pathType: Prefix
 status:
   loadBalancer: {}
