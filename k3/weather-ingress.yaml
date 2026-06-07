@@ -4,6 +4,7 @@ metadata:
   name: weather-ingress
   namespace: weather
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     # For Traefik (K3s default)
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
     # For automatic HTTPS redirect
@@ -11,6 +12,10 @@ metadata:
     traefik.ingress.kubernetes.io/redirect-permanent: "true"
 spec:
   ingressClassName: traefik
+  tls:
+  - hosts:
+    - weather.vivekpadayattil.com
+    secretName: weather-tls-cert 
   rules:
   - host: weather.vivekpadayattil.com
     http:
