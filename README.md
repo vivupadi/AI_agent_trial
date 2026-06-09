@@ -1,14 +1,14 @@
 # Weather Alert Agent
 
-An AI agent that sends reminder email whether to carry an umbrella(rain probability) to the user-provided mail-id based on the user-provided city and country code.
+An AI agent that sends a reminder email whether to carry an umbrella(rain probability) and daily Rain forecast to the user-provided mail-id based on the user-provided city and country code.
 
 ## Tech Stack
 
-Frontend : HTML/Javascript
+Frontend : HTML/Javascript with nginx.conf (weather sub-domain)
 
 Backend: Python/ SQLite/ FastAPI
 
-Database: SQLite 
+Database: SQLite (Persistent volume on the Hetzner server)
 
 Hosted: Hetzner Server using Kubernetes K3 service
 
@@ -28,6 +28,6 @@ Hosted: Hetzner Server using Kubernetes K3 service
 
 ## Live Demo
 
-[Weather Agent](http://46.225.56.25:31080/)
+[Weather Agent]((https://weather.vivekpadayattil.com/)
 
 ## Licenses
