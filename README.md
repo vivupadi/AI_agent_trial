@@ -2,7 +2,7 @@
 
 An AI agent that sends a reminder email whether to carry an umbrella(rain probability) and daily Rain forecast to the user-provided mail-id based on the user-provided city and country code.
 
-[!til](https://github.com/vivupadi/AI_agent_trial/blob/main/Frontend.jpg)
+[!](https://github.com/vivupadi/AI_agent_trial/blob/main/Frontend.jpg)
 
 ## Tech Stack
 
