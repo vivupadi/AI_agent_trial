@@ -2,6 +2,8 @@
 
 An AI agent that sends a reminder email whether to carry an umbrella(rain probability) and daily Rain forecast to the user-provided mail-id based on the user-provided city and country code.
 
+[!til](https://github.com/vivupadi/AI_agent_trial/blob/main/Frontend.jpg)
+
 ## Tech Stack
 
 Frontend : HTML/Javascript with nginx.conf (weather sub-domain)
@@ -28,6 +30,6 @@ Hosted: Hetzner Server using Kubernetes K3 service
 
 ## Live Demo
 
-[Weather Agent]((https://weather.vivekpadayattil.com/)
+[Weather Agent](https://weather.vivekpadayattil.com/)
 
 ## Licenses
