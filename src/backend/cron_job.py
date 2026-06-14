@@ -25,7 +25,7 @@ GMAIL_APP_PASSWORD = os.getenv("google_app_password")  # Use App Password, not r
 
 
 # Weather thresholds for umbrella recommendation
-RAIN_THRESHOLD = 0.15  # 25% chance of rain
+RAIN_THRESHOLD = 0.20  # 20% chance of rain
 RAIN_KEYWORDS = ['rain', 'drizzle', 'thunderstorm', 'shower']
 # ===================================
 
@@ -184,21 +184,25 @@ def main():
 
     current_time = datetime.now().time()
     current_hour = current_time.hour
+    current_minute = current_time.minute
 
     db = Create_db()
     users = db.get_all_users()
 
     for user in users:
         scheduled_hour = int(user['SCHEDULED_TIME'].split(':')[0])
+        scheduled_minute = int(user['SCHEDULED_TIME'].split(':')[1])
 
         print(f"Checking user: {user['USER']} - Scheduled Hour: {scheduled_hour} - Current Hour: {current_hour}")
 
         if current_hour == scheduled_hour:
-            # Create agent instance
-            agent = WeatherEmailAgent(OPENWEATHER_API_KEY, user['EMAIL'], user['USER'], user['CITY'], user['COUNTRY_CODE'], user['SCHEDULED_TIME'])
-            
-            # Run check for this user
-            agent.run_check()
+            if scheduled_minute >= current_minute and scheduled_minute < current_minute +30:  # Check within a 5-minute window
+                print(f"Time matches for user: {user['USER']} - Running weather check...")
+                # Create agent instance
+                agent = WeatherEmailAgent(OPENWEATHER_API_KEY, user['EMAIL'], user['USER'], user['CITY'], user['COUNTRY_CODE'], user['SCHEDULED_TIME'])
+                
+                # Run check for this user
+                agent.run_check()
 
 
 if __name__ == "__main__":
