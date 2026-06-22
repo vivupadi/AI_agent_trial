@@ -32,6 +32,10 @@ Hosted: Hetzner Server using Kubernetes K3 service
 
 [Weather Agent](https://weather.vivekpadayattil.com/)
 
+- The app runs on the server every 30 minutes. So if a person has logged a time of 7:15 am. They will receive the notification at 7 am. For someone scheduled at 7:45am, would receive it at 7:30 am.
+- This is because the cronjob runs every 30 minutes.
+- Since the server has less RAM, the cronjob initiates every 30minutes. Once the system is migrated to more powerful server, the frequency can be increased!
+
 ## Next Steps
 
 - CI/CD Deployment
